@@ -30,9 +30,9 @@ module ProxyServer
     (@buf ||= "") << data
     if @buf =~ /\r\n\r\n/ # all http headers received
       
-      if @buf =~ /Host: ([\w\.]*)(:(\d*))?/
+      if @buf =~ /Host: ((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])\.)+([a-zA-Z0-9]{2,5}))(:(\d*))?/
         host=$1
-        port=$3||80
+        port=$5||80
         puts "connecting to #{host} on #{port}..."
         EM.connect(host, port, ProxyConnection, self, data)
       end
